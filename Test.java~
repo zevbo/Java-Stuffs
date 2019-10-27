@@ -1,0 +1,86 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Hashtable;
+import javafx.util.Pair;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public class Test{
+  
+  public static void sivStepper (boolean[] siv, int on, int step){
+    for (int i = on; i < siv.length; i += step){
+      siv[i] = false;
+    }
+  }
+  
+  public static int sivAmount(int highest){
+    int amount = 0;
+    boolean[] siv = new boolean[highest];
+    siv[0] = false; siv[1] = false;
+    for (int i = 2; i < siv.length; i++){
+      siv[i] = true;
+    }
+    for (int i = 2; i < siv.length; i++){
+      if (siv[i]){
+        amount++;
+        sivStepper(siv,i + i,i);
+      }
+    }
+    return amount;
+  }
+  
+  public static int getPyramidLength (int numberOfEntries){
+    return (int) (-.5 + Math.sqrt(.25 + 2 * numberOfEntries));
+  }
+  
+  public static int[][] parsePyramid(String pyramidString){
+    String[] entries = pyramidString.split(" ");
+    int[][] tree = new int[getPyramidLength(entries.length)][];
+    for (int row = 0; row < tree.length; row++){
+      tree[row] = new int[row + 1];
+      for (int col = 0; col <= row; col++){
+        int index = row * (row + 1) / 2 + col;
+        tree[row][col] = Integer.parseInt(entries[index]);
+      }
+    }
+    return tree;
+  }
+  
+  public static int getMaxPath(int[][] pyramid, int row, int col, Hashtable<Pair<Integer,Integer>, Integer> knownValues){
+    if (row == pyramid.length){
+      return 0;
+    } else {
+      Pair<Integer, Integer> position = new Pair(row, col);
+      if (!knownValues.containsKey(position)){
+        int maxValue = Math.max(getMaxPath(pyramid,row + 1,col,knownValues), getMaxPath(pyramid,row + 1,col + 1,knownValues));
+        knownValues.put(position, maxValue + pyramid[row][col]);
+      }
+      return knownValues.get(position);
+    }
+  }
+  
+  public static int getMaxPathOfString(String pyramidString){
+    return getMaxPath(parsePyramid(pyramidString), 0, 0, new Hashtable<Pair<Integer,Integer>, Integer>());
+  }
+  
+  public static void main(String[] args){
+    System.out.println(sivAmount(1000000000));
+  }
+  
+  
+  
+  public static int getMaxPathSlow(int[][] pyramid, int row, int col, Hashtable<Pair<Integer,Integer>, Integer> knownValues){
+    if (row == pyramid.length){
+      return 0;
+    } else {
+      Pair<Integer, Integer> pair = new Pair(row, col);
+      int maxValue = Math.max(getMaxPathSlow(pyramid,row + 1,col,knownValues), getMaxPathSlow(pyramid,row + 1,col + 1,knownValues));
+      return maxValue + pyramid[row][col];
+      }
+    }
+  
+  public static int getMaxPathOfStringSlow(String pyramidString){
+    return getMaxPathSlow(parsePyramid(pyramidString), 0, 0, new Hashtable<Pair<Integer,Integer>, Integer>());
+  }
+  
+}

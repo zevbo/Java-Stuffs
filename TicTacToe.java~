@@ -1,0 +1,43 @@
+public class TicTacToe{
+  
+  private int[][] board;
+  
+  TicTacToe(){board = int[3][3];}
+  
+  private int overS(board,r1,c1,r2,c2,r2,c3){
+    if (board[r1][c1] == board[r2][c2] && board[r2][c2] == board[r3][c3])
+      return board[r1][c1];
+    else
+      return 0;}
+  
+  private boolean full(board){
+    for (int[] row : board){
+      for (int col : row){
+        if (col == 0)
+          return false;
+      }}
+    return true;
+  }
+  
+  private boolean over(board){
+    int[] values = new int[]{
+      overS(board, 0,0, 0,1, 0,2);
+      overS(board, 1,0, 1,1, 1,2);
+      overS(board, 2,0, 2,1, 2,2);
+      
+      overS(board, 0,0, 1,0, 2,0);
+      overS(board, 0,1, 1,1, 2,1);
+      overS(board, 0,2, 1,2, 2,2);
+      
+      overS(board, 0,0, 1,1, 2,2);
+      overS(board, 2,0, 1,1, 0,2);
+    };
+    
+    for (int value : values){
+      if !(value == 0)
+        return value;
+    }
+    
+    full(board) ? return 0 : return -1;
+  }
+}
