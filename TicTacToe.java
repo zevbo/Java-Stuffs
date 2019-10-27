@@ -37,8 +37,7 @@ public class TicTacToe{
     };
     
     for (int value : values){
-      if (value != 0)
-        return value;
+      if (value != 0){return value;}
     }
     
     return (full(board) ?  0 : -1);
@@ -46,20 +45,21 @@ public class TicTacToe{
   
   private int[][] copyBoard(int[][] board){
     int[][] copyArr = board.clone();
-    for (int i = 0; i < copyArr.length; i++)
+    for (int i = 0; i < copyArr.length; i++){
       copyArr[i] = copyArr[i].clone();
+    }
     return copyArr;
   }
   
   private int getValue(int[][] board, int turn){
     int overVal = over(board);
-    if (overVal == 0)
+    if (overVal == 0) {
       return 0;
-    else if (overVal == playerTurn)
+    } else if (overVal == playerTurn) {
       return -1;
-    else if (overVal == 3 - playerTurn)
+    } else if (overVal == 3 - playerTurn) {
       return 1;
-    else{
+    } else{
       int[][] values = new int[][]{{-2,-2,-2},{-2,-2,-2},{-2,-2,-2}};
       for (int r = 0; r < 3; r++){
         for (int c = 0; c < 3; c++){
@@ -96,14 +96,12 @@ public class TicTacToe{
           int[][] newBoard = copyBoard(board);
           newBoard[r][c] = 3 - playerTurn;
           int value = getValue(newBoard,playerTurn);
-          System.out.println("value: " + value);
           if (value > maxVal){
             maxVal = value;
             maxPos[0] = r;
             maxPos[1] = c;
           }
         }}}
-    System.out.println("moving at: " + maxPos[0] + ", " + maxPos[1]);
     return maxPos;
   }
   
@@ -116,20 +114,27 @@ public class TicTacToe{
   }
   
   private String overMessage(int overVal){
-    if (overVal == 0)
+    if (overVal == 0) {
       return "The game was a draw!";
-    else if (overVal == 1)
-      return "X won!";
-    else
-      return "O won!";
+    } else {
+      return conv(overVal) + " won!";
+    }
+  }
+  
+  private String conv(int n){
+    switch(n){
+      case 1: return "X";
+      case 2: return "O";
+      default: return " ";
+    }
   }
   
   private void printBoard(int[][] board){
-    System.out.println(board[0][0] + "|" + board[0][1] + "|" + board[0][2]);
+    System.out.println(conv(board[0][0]) + "|" + conv(board[0][1]) + "|" + conv(board[0][2]));
     System.out.println("-----");
-    System.out.println(board[1][0] + "|" + board[1][1] + "|" + board[1][2]);
+    System.out.println(conv(board[1][0]) + "|" + conv(board[1][1]) + "|" + conv(board[1][2]));
     System.out.println("-----");
-    System.out.println(board[2][0] + "|" + board[2][1] + "|" + board[2][2]);
+    System.out.println(conv(board[2][0]) + "|" + conv(board[2][1]) + "|" + conv(board[2][2]));
     System.out.println("");
   }
 
@@ -171,7 +176,13 @@ public class TicTacToe{
       
   }
   
-  public void play(){
-    playGame(1);
+  public void play(){playGame(1);}
+  
+  public static void newGame(){
+    (new TicTacToe()).play();
+  }
+  
+  public static void main(String[] args){
+    newGame();
   }
 }
